@@ -1,1 +1,1 @@
-# bnt-kata-exercise
+# bnp-kata-exercise
