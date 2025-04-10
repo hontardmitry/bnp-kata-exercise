@@ -1,8 +1,11 @@
-package steps;
+package utils;
+
+import static org.apache.http.HttpStatus.SC_OK;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
 public class ResponseUtil {
@@ -32,5 +35,15 @@ public class ResponseUtil {
         } catch (Exception e) {
             return null; // Field not found or other error
         }
+    }
+
+    public static ExtractableResponse<Response> checkStatusCodeAndExtractResponse(Response response, Integer expectedStatusCode) {
+        return response.then().statusCode(expectedStatusCode).extract();
+
+    }
+
+    public static ExtractableResponse<Response> checkOkStatusCodeAndExtractResponse(Response response) {
+        return response.then().statusCode(SC_OK).extract();
+
     }
 }

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.HttpClientConfig;
-import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 
 public class RestConfig {
@@ -23,7 +22,8 @@ public class RestConfig {
 
         RequestSpecBuilder specBuilder = new RequestSpecBuilder()
                 .setBaseUri(getProperty("baseUri"))
-                .setContentType("application/json");
+                .setContentType("application/json")
+                .addFilter(new LoggingFilter());
 
         int timeout;
         try {
@@ -38,16 +38,8 @@ public class RestConfig {
         config.setParam("http.connection.timeout", timeout)
                 .setParam("http.socket.timeout", timeout)
                 .setParam("http.connection-manager.timeout", (long) timeout);
-        // The timeout is used for all the following connections:
-        // - Connection timeout: time to establish a new connection
-        // - Socket timeout: time to receive a response
-        // - Connection manager timeout: time to wait for a free connection in the connection pool
+
         specBuilder.setConfig(config().httpClient(config));
-
-        if (Boolean.parseBoolean(getProperty("logEnabled", "false"))) {
-            specBuilder.log(LogDetail.ALL);
-        }
-
         return specBuilder.build();
     }
 }

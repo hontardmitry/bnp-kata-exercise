@@ -1,5 +1,7 @@
 package context;
 
+import models.UserEntity;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -10,6 +12,7 @@ import io.restassured.response.Response;
 public class ScenarioContext {
 
     private static final String RESPONSE_KEY = "response";
+    private static final String USER_KEY = "user";
 
     private static final ThreadLocal<Map<String, Object>> context = ThreadLocal.withInitial(HashMap::new);
 
@@ -34,6 +37,15 @@ public class ScenarioContext {
 
     public static Response getResponse() {
         return ScenarioContext.<Response>get(RESPONSE_KEY)
-                .orElseThrow(() -> new NoSuchElementException("No response found for the response key"));
+                .orElseThrow(() -> new NoSuchElementException("No response found for the 'response' key"));
+    }
+
+    public static void setUser(UserEntity user) {
+        ScenarioContext.set(USER_KEY, user);
+    }
+
+    public static UserEntity getUser() {
+        return ScenarioContext.<UserEntity>get(USER_KEY)
+                .orElseThrow(() -> new NoSuchElementException("No user found for the 'user' key"));
     }
 }
