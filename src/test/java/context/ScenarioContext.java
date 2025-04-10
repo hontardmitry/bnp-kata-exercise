@@ -1,6 +1,7 @@
 package context;
 
 import models.UserEntity;
+import models.response.CommonResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,15 @@ public class ScenarioContext {
 
     public static void setResponse(Response response) {
         ScenarioContext.set(RESPONSE_KEY, response);
+    }
+
+    public static void setCommonResponse(String key,CommonResponse response) {
+        ScenarioContext.set(key, response);
+    }
+
+    public static CommonResponse getCommonResponse(String key) {
+        return ScenarioContext.<CommonResponse>get(key)
+                .orElseThrow(() -> new NoSuchElementException("No common response found for the provided key"));
     }
 
     public static Response getResponse() {

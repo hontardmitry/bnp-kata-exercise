@@ -16,7 +16,7 @@ import io.cucumber.java.en.When;
 
 public class CreateUserSteps {
 
-    private static final String USER_CREATION_RESPONSE_KEY = "userCreationResponse";
+    private static final String USER_CREATION_RESPONSE = "userCreationResponse";
     private final UserClient userClient = new UserClient();
 
     @Given("I have an existing user")
@@ -50,17 +50,18 @@ public class CreateUserSteps {
     public void iSendAPOSTRequestToCreateAUser() {
         var user = ScenarioContext.getUser();
         var response = userClient.createUser(user);
-        ScenarioContext.set(USER_CREATION_RESPONSE_KEY, response);
+        ScenarioContext.set(USER_CREATION_RESPONSE, response);
     }
 
     @Then("I receive the success response with userId value")
     public void iReceiveTheSuccessResponseWithUserIdValue() {
-        CommonResponse response = (CommonResponse) ScenarioContext.get(USER_CREATION_RESPONSE_KEY)
+        CommonResponse response = (CommonResponse) ScenarioContext.get(USER_CREATION_RESPONSE)
                 .orElseThrow(() -> new IllegalStateException("No response found"));
 
         checkSuccessResponse(response);
         // if the user was created successfully, the userId will be greater than 0
         assertNotEquals("UserId should be greater than 0",0,response.getUserId());
     }
+
 
 }

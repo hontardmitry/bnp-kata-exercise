@@ -16,7 +16,7 @@ public class CommonResponse {
     private int status;
     private boolean success;
     private String message;
-    private String token;
     private List<String> validationErrors;
+    private String token;
     private int userId;
 }
