@@ -3,59 +3,65 @@ package context;
 import models.UserEntity;
 import models.response.CommonResponse;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import io.restassured.response.Response;
 
 public class ScenarioContext {
 
-    private static final String RESPONSE_KEY = "response";
-    private static final String USER_KEY = "user";
-
-    private static final ThreadLocal<Map<String, Object>> context = ThreadLocal.withInitial(HashMap::new);
+    // ThreadLocal instance for per-thread context management.
+    private static final ThreadLocal<DataHolder> context = ThreadLocal.withInitial(DataHolder::new);
 
     private ScenarioContext() {
+        // private constructor to prevent instantiation
     }
 
     public static void set(String key, Object value) {
-        context.get().put(key, value);
+        context.get().getDataMap().put(key, value);
     }
 
     public static <T> Optional<T> get(String key) {
-        return Optional.ofNullable((T) context.get().get(key));
+        return Optional.ofNullable((T) context.get().getDataMap().get(key));
     }
 
+    /**
+     * Clears the context data for the current thread.
+     */
     public static void clear() {
         context.get().clear();
     }
 
     public static void setResponse(Response response) {
-        ScenarioContext.set(RESPONSE_KEY, response);
-    }
-
-    public static void setCommonResponse(String key,CommonResponse response) {
-        ScenarioContext.set(key, response);
-    }
-
-    public static CommonResponse getCommonResponse(String key) {
-        return ScenarioContext.<CommonResponse>get(key)
-                .orElseThrow(() -> new NoSuchElementException("No common response found for the provided key"));
+        context.get().setRestResponse(response);
     }
 
     public static Response getResponse() {
-        return ScenarioContext.<Response>get(RESPONSE_KEY)
-                .orElseThrow(() -> new NoSuchElementException("No response found for the 'response' key"));
+        return context.get().getRestResponse();
+    }
+
+    public static void setCommonResponse(CommonResponse response) {
+        context.get().setCommonResponse(response);
+    }
+
+    public static CommonResponse getCommonResponse() {
+        return context.get().getCommonResponse();
     }
 
     public static void setUser(UserEntity user) {
-        ScenarioContext.set(USER_KEY, user);
+        context.get().setUser(user);
     }
 
     public static UserEntity getUser() {
-        return ScenarioContext.<UserEntity>get(USER_KEY)
-                .orElseThrow(() -> new NoSuchElementException("No user found for the 'user' key"));
+        return context.get().getUser();
+    }
+
+    public static void setDataRows(List<Map<String, String>> rows) {
+        context.get().setRows(rows);
+    }
+
+    public static List<Map<String, String>> getDataRows() {
+        return context.get().getRows();
     }
 }

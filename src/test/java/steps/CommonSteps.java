@@ -34,7 +34,9 @@ public class CommonSteps {
 
     @Then("the response status should be {int}")
     public void theResponseStatusShouldBe(Integer expectedStatus) {
-        assertEquals(expectedStatus, (Integer) ScenarioContext.getResponse().getStatusCode());
+        Integer actualStatus = ScenarioContext.getResponse().getStatusCode();
+        assertEquals(String.format("Expected status: %s, actual status: %s", expectedStatus, actualStatus),
+                expectedStatus, actualStatus);
     }
 
     @Then("the response should contain field {string} with the integer value {int}")
@@ -43,18 +45,20 @@ public class CommonSteps {
                 .getBody()
                 .jsonPath()
                 .get(fieldName);
-        assertEquals(value, actualValue);
+
+        assertEquals(String.format("For the field: %s, Expected value: %s, actual value: %s",
+                fieldName, value, actualValue), value, actualValue);
     }
 
     @Then("the response should contain a value for the field {string}")
     public void theResponseShouldContainAValueForTheField(String fieldName) {
         var actualValue = getValueForTheField(fieldName, ScenarioContext.getResponse());
-        assertNotNull("Actual value for the field is null",actualValue);
+        assertNotNull("Actual value for the field should not be null", actualValue);
     }
 
     @Then("the response should contain not empty list of entities")
     public void theResponseShouldContainMultipleEntities() {
         var actualValue = getResponseAsList(ScenarioContext.getResponse());
-        assertTrue("Actual number of entities in the response is 0",actualValue.size() > 1);
+        assertTrue("Actual number of entities in the response is 0", actualValue.size() > 1);
     }
 }
