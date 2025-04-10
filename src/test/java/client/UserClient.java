@@ -24,11 +24,17 @@ public class UserClient implements GetRequest, PostRequest, PutRequest {
                 .as(CommonResponse.class);
     }
 
-    public String login(String login, String password) {
+    public String loginAndGetToken(String login, String password) {
         var credentials = UserEntity.builder().login(login).password(password).build();
         return checkOkStatusCodeAndExtractResponse(post(USER_LOGIN_PATH, credentials))
                 .jsonPath()
                 .getString(TOKEN_KEY);
+    }
+
+    public CommonResponse login(String login, String password) {
+        var credentials = UserEntity.builder().login(login).password(password).build();
+        return checkOkStatusCodeAndExtractResponse(post(USER_LOGIN_PATH, credentials))
+                .as(CommonResponse.class);
     }
 
     public UserEntity getUser(Integer id) {
