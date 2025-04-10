@@ -23,7 +23,7 @@ public class DataTableUtil {
                 .toList();
     }
 
-    public static void getRowsForCurrentEnvAndStore(DataTable dataTable, String key) {
-        ScenarioContext.set(key, getRowsForCurrentEnv(dataTable));
+    public static void getRowsForCurrentEnvAndStore(DataTable dataTable) {
+        ScenarioContext.setDataRows(getRowsForCurrentEnv(dataTable));
     }
 }
