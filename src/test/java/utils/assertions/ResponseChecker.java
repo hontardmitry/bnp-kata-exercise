@@ -8,6 +8,9 @@ import models.response.CommonResponse;
 
 public class ResponseChecker {
 
+    private ResponseChecker() {
+        throw new IllegalStateException("Utility class");
+    }
     public static void checkSuccessResponse(CommonResponse response) {
         assertNotNull(response);
         assertTrue("The value for success should be true", response.isSuccess());

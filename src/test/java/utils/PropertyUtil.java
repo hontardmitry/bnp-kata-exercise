@@ -10,9 +10,10 @@ import java.util.Properties;
 public class PropertyUtil {
 
     private PropertyUtil() {
+        throw new IllegalStateException("Utility class");
     }
 
-    private static final String ENV_PROPERTY = System.getProperty("env", "prod");
+    public static final String ENV_PROPERTY = System.getProperty("env", "prod");
     private static final Properties properties;
 
     static {
