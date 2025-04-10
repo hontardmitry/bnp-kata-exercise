@@ -11,6 +11,7 @@ import io.restassured.response.Response;
 public class ResponseUtil {
 
     private ResponseUtil() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static List<LinkedHashMap<String, Object>> getResponseAsList(Response response) {
