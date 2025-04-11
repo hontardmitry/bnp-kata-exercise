@@ -19,4 +19,5 @@ public class CommonResponse {
     private List<String> validationErrors;
     private String token;
     private int userId;
+    private int postId;
 }

@@ -1,6 +1,6 @@
 package utils;
 
-import static utils.PropertyUtil.ENV_PROPERTY;
+import static utils.PropertyUtil.ENVIRONMENT;
 
 import context.ScenarioContext;
 
@@ -19,7 +19,7 @@ public class DataTableUtil {
         List<Map<String, String>> rows = dataTable.asMaps();
 
         return rows.stream()
-                .filter(row -> row.get("environment").equals(ENV_PROPERTY))
+                .filter(row -> row.get("environment").equals(ENVIRONMENT))
                 .toList();
     }
 

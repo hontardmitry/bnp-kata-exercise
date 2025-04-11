@@ -14,15 +14,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class CreateUserSteps {
+public class UserCreateSteps {
 
-    private static final String USER_CREATION_RESPONSE = "userCreationResponse";
     private final UserClient userClient = new UserClient();
 
     @Given("I have an existing user")
     public void iHaveAnExistingUser() {
         var availableUsers = userClient.getUserAdministration();
-        if(availableUsers.isEmpty()) {
+        if (availableUsers.isEmpty()) {
             var user = UserEntity.builder().login("test").password("test").build();
             userClient.createUser(user);
         }
@@ -50,17 +49,16 @@ public class CreateUserSteps {
     public void iSendAPOSTRequestToCreateAUser() {
         var user = ScenarioContext.getUser();
         var response = userClient.createUser(user);
-        ScenarioContext.set(USER_CREATION_RESPONSE, response);
+        ScenarioContext.setCommonResponse(response);
     }
 
     @Then("I receive the success response with userId value")
     public void iReceiveTheSuccessResponseWithUserIdValue() {
-        CommonResponse response = (CommonResponse) ScenarioContext.get(USER_CREATION_RESPONSE)
-                .orElseThrow(() -> new IllegalStateException("No response found"));
+        CommonResponse response = ScenarioContext.getCommonResponse();
 
         checkSuccessResponse(response);
         // if the user was created successfully, the userId will be greater than 0
-        assertNotEquals("UserId should be greater than 0",0,response.getUserId());
+        assertNotEquals("UserId should not be 0", 0, response.getUserId());
     }
 
 
