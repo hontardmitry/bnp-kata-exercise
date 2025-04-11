@@ -1,6 +1,7 @@
 package steps;
 
 import static org.junit.Assert.assertNotEquals;
+import static steps.CommonSteps.iReceiveTheSuccessResponseWithIdValue;
 import static utils.assertions.ResponseChecker.checkSuccessResponse;
 
 import client.UserClient;
@@ -54,12 +55,6 @@ public class UserCreateSteps {
 
     @Then("I receive the success response with userId value")
     public void iReceiveTheSuccessResponseWithUserIdValue() {
-        CommonResponse response = ScenarioContext.getCommonResponse();
-
-        checkSuccessResponse(response);
-        // if the user was created successfully, the userId will be greater than 0
-        assertNotEquals("UserId should not be 0", 0, response.getUserId());
+        iReceiveTheSuccessResponseWithIdValue(CommonResponse::getUserId);
     }
-
-
 }

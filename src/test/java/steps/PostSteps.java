@@ -1,6 +1,7 @@
 package steps;
 
 import static org.junit.Assert.assertNotEquals;
+import static steps.CommonSteps.iReceiveTheSuccessResponseWithIdValue;
 import static utils.FileUtil.loadJsonData;
 import static utils.assertions.ResponseChecker.checkSuccessResponse;
 
@@ -28,8 +29,7 @@ public class PostSteps {
 
     @When("I send a POST request to create a post with stored post body")
     public void iSendAPOSTRequestToCreateAPostWithStoredTitleAndContent() {
-        var postBody = ScenarioContext.get(POST_BODY)
-                .orElseThrow(() -> new RuntimeException("No post body found"));
+        var postBody = ScenarioContext.getObject(POST_BODY);
 
         var response = postClient.createPost(postBody);
         ScenarioContext.setCommonResponse(response);
@@ -43,10 +43,6 @@ public class PostSteps {
 
     @Then("I receive the success response with postId value")
     public void iReceiveTheSuccessResponseWithPostIdValue() {
-        CommonResponse response = ScenarioContext.getCommonResponse();
-
-        checkSuccessResponse(response);
-        // if the user was created successfully, the userId will be greater than 0
-        assertNotEquals("PostId should not be 0", 0, response.getPostId());
+        iReceiveTheSuccessResponseWithIdValue(CommonResponse::getPostId);
     }
 }
