@@ -1,13 +1,18 @@
 package steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static utils.ResponseUtil.getResponseAsList;
 import static utils.ResponseUtil.getValueForTheField;
+import static utils.assertions.ResponseChecker.checkSuccessResponse;
 
 import client.GenericRestClient;
 import context.ScenarioContext;
+import models.response.CommonResponse;
+
+import java.util.function.Function;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -58,7 +63,17 @@ public class CommonSteps {
 
     @Then("the response should contain not empty list of entities")
     public void theResponseShouldContainMultipleEntities() {
-        var actualValue = getResponseAsList(ScenarioContext.getResponse());
-        assertTrue("Actual number of entities in the response is 0", actualValue.size() > 1);
+        var actualList = getResponseAsList(ScenarioContext.getResponse());
+        assertFalse("Actual number of entities in the response is 0", actualList.isEmpty());
+    }
+
+
+    public static void iReceiveTheSuccessResponseWithIdValue(Function<CommonResponse, Integer> idProviderFunction) {
+        CommonResponse response = ScenarioContext.getCommonResponse();
+
+        checkSuccessResponse(response);
+        // if the user was created successfully, the userId will be greater than 0
+        long id = idProviderFunction.apply(response);
+        assertNotEquals("Entity was not created successfully. Id in the response is 0", 0, id);
     }
 }
