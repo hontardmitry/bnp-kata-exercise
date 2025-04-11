@@ -28,8 +28,7 @@ public class PostSteps {
 
     @When("I send a POST request to create a post with stored post body")
     public void iSendAPOSTRequestToCreateAPostWithStoredTitleAndContent() {
-        var postBody = ScenarioContext.get(POST_BODY)
-                .orElseThrow(() -> new RuntimeException("No post body found"));
+        var postBody = ScenarioContext.getObject(POST_BODY);
 
         var response = postClient.createPost(postBody);
         ScenarioContext.setCommonResponse(response);

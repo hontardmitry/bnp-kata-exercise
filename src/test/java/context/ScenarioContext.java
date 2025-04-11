@@ -7,11 +7,13 @@ import models.response.CommonResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import io.restassured.response.Response;
 
 public class ScenarioContext {
 
+    private static final String NOT_FOUND_ERROR_MESSAGE_TMPLT = "No %s found in the data holder";
     // ThreadLocal instance for per-thread context management.
     private static final ThreadLocal<DataHolder> context = ThreadLocal.withInitial(DataHolder::new);
 
@@ -23,14 +25,25 @@ public class ScenarioContext {
         context.get().getDataMap().put(key, value);
     }
 
-    public static <T> Optional<T> get(String key) {
-        return Optional.ofNullable((T) context.get().getDataMap().get(key));
+    public static <T> T get(Supplier<Object> supplier, Class<T> type, String errorMessage) {
+        return type.cast(Optional.ofNullable(supplier.get())
+                .orElseThrow(() -> new RuntimeException(errorMessage)));
+    }
+
+    public static <T> T get(Supplier<T> supplier, String errorMessage) {
+        return Optional.ofNullable(supplier.get())
+                .orElseThrow(() -> new RuntimeException(errorMessage));
     }
 
     public static String getString(String key) {
-        return (String) (get(key).orElseThrow(() -> new RuntimeException(String.format("No %s found", key))));
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, key);
+        return get(() -> context.get().getDataMap().get(key), String.class, errorMessage);
     }
 
+    public static Object getObject(String key) {
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, key);
+        return get(() -> context.get().getDataMap().get(key), errorMessage);
+    }
     /**
      * Clears the context data for the current thread.
      */
@@ -43,7 +56,8 @@ public class ScenarioContext {
     }
 
     public static Response getResponse() {
-        return context.get().getRestResponse();
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "response");
+        return get(() -> context.get().getRestResponse(), errorMessage);
     }
 
     public static void setCommonResponse(CommonResponse response) {
@@ -51,7 +65,8 @@ public class ScenarioContext {
     }
 
     public static CommonResponse getCommonResponse() {
-        return context.get().getCommonResponse();
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "common response");
+        return get(() -> context.get().getCommonResponse(), errorMessage);
     }
 
     public static void setUser(UserEntity user) {
@@ -59,14 +74,16 @@ public class ScenarioContext {
     }
 
     public static UserEntity getUser() {
-        return context.get().getUser();
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "user");
+        return get(() -> context.get().getUser(), errorMessage);
     }
 
     public static void setPost(PostEntity post) {
         context.get().setPost(post);
     }
     public static PostEntity getPost() {
-        return context.get().getPost();
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "post");
+        return get(() -> context.get().getPost(), errorMessage);
     }
 
     public static void setDataRows(List<Map<String, String>> rows) {
@@ -74,6 +91,7 @@ public class ScenarioContext {
     }
 
     public static List<Map<String, String>> getDataRows() {
-        return context.get().getRows();
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "data rows");
+        return get(() -> context.get().getRows(), errorMessage);
     }
 }
