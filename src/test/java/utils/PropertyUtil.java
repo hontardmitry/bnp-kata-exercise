@@ -13,7 +13,7 @@ public class PropertyUtil {
         throw new IllegalStateException("Utility class");
     }
 
-    public static final String ENV_PROPERTY = System.getProperty("env", "prod");
+    public static final String ENVIRONMENT = System.getProperty("env", "prod");
     private static final Properties properties;
 
     static {
@@ -34,7 +34,7 @@ public class PropertyUtil {
 
     private static Properties loadProperties() throws ConfigurationException {
         Properties props = new Properties();
-        String path = String.format("config/%s.properties", ENV_PROPERTY);
+        String path = String.format("config/%s.properties", ENVIRONMENT);
         try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(path)) {
             if (input == null) throw new ConfigurationException("Missing config: " + path);
             props.load(input);

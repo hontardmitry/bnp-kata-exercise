@@ -13,14 +13,14 @@ import java.util.List;
 public class UserClient implements GetRequest, PostRequest, PutRequest {
 
     private static final String TOKEN_KEY = "token";
-    private static final String USER_PATH = "User/";
-    private static final String USER_ID_PATH = USER_PATH + "{id}";
-    private static final String USER_LOGIN_PATH = USER_PATH + "Login";
-    private static final String GET_USER_ADMINISTRATION_PATH = USER_PATH + "GetUserAdministration";
-    private static final String UPDATE_USER_ROLE_PATH = USER_PATH + "UpdateUserRole";
+    private static final String USER_ENDPOINT = "User/";
+    private static final String USER_ID_PATH = USER_ENDPOINT + "{id}";
+    private static final String USER_LOGIN_PATH = USER_ENDPOINT + "Login";
+    private static final String GET_USER_ADMINISTRATION_PATH = USER_ENDPOINT + "GetUserAdministration";
+    private static final String UPDATE_USER_ROLE_PATH = USER_ENDPOINT + "UpdateUserRole";
 
     public CommonResponse createUser(UserEntity user) {
-        return checkOkStatusCodeAndExtractResponse(post(USER_PATH, user))
+        return checkOkStatusCodeAndExtractResponse(post(USER_ENDPOINT, user))
                 .as(CommonResponse.class);
     }
 

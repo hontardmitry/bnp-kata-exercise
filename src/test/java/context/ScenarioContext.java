@@ -1,5 +1,6 @@
 package context;
 
+import models.PostEntity;
 import models.UserEntity;
 import models.response.CommonResponse;
 
@@ -24,6 +25,10 @@ public class ScenarioContext {
 
     public static <T> Optional<T> get(String key) {
         return Optional.ofNullable((T) context.get().getDataMap().get(key));
+    }
+
+    public static String getString(String key) {
+        return (String) (get(key).orElseThrow(() -> new RuntimeException(String.format("No %s found", key))));
     }
 
     /**
@@ -55,6 +60,13 @@ public class ScenarioContext {
 
     public static UserEntity getUser() {
         return context.get().getUser();
+    }
+
+    public static void setPost(PostEntity post) {
+        context.get().setPost(post);
+    }
+    public static PostEntity getPost() {
+        return context.get().getPost();
     }
 
     public static void setDataRows(List<Map<String, String>> rows) {

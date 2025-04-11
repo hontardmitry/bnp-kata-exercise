@@ -1,6 +1,7 @@
 package context;
 
 import lombok.Data;
+import models.PostEntity;
 import models.UserEntity;
 import models.response.CommonResponse;
 
@@ -17,6 +18,7 @@ public class DataHolder {
     private Response restResponse;
     private CommonResponse commonResponse;
     private UserEntity user;
+    private PostEntity post;
     private List<Map<String, String>> rows;
     private Map<String, Object> dataMap;
 
