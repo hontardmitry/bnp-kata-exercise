@@ -1,8 +1,8 @@
 package com.dmytrohont.test.steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static com.dmytrohont.test.utils.DataTableUtil.getRowsForCurrentEnvAndStore;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.dmytrohont.test.client.UserClient;
 import com.dmytrohont.test.context.ScenarioContext;
@@ -16,13 +16,13 @@ public class LoginSteps {
 
     private final UserClient userClient = new UserClient();
 
-    @When("I send a POST request to Login with login {string} and password {string}")
+    @When("I send a POST request to the 'Login' endpoint with login {string} and password {string}")
     public void iSendAPOSTRequestToLoginWithLoginAndPassword(String login, String password) {
         var response = userClient.login(login, password);
         ScenarioContext.setCommonResponse(response);
     }
 
-    @When("I send a POST request to Login with stored login and password")
+    @When("I send a POST request to the 'Login' endpoint with stored login and password")
     public void iSendAPOSTRequestToLoginWithStoredLoginAndPassword() {
         var credentials = ScenarioContext.getDataRows()
                 .stream().findFirst().orElseThrow(() -> new RuntimeException("No credentials found"));
@@ -31,19 +31,15 @@ public class LoginSteps {
         ScenarioContext.setCommonResponse(response);
     }
 
-    @Then("I receive the token value in the response")
-    public void iReceiveTheSuccessResponseWithTokenValue() {
-        assertNotEquals(
-//                "Token should not be empty",
-                "",
-                getStoredToken());
+    @Then("the response contains the token value")
+    public void theResponseContainsTheTokenValue() {
+        assertFalse(getStoredToken().isBlank(), "Token should not be blank");
     }
 
-    @Then("I receive the response with empty value for the token field")
-    public void iReceiveTheSuccessResponseWithoutTokenValue() {
-        assertEquals(
-//                "Token should not be empty",
-                "", getStoredToken());
+    @Then("the token value is blank in the response")
+    public void theTokenValueIsBlankInTheResponse() {
+        var actualToken = getStoredToken();
+        assertTrue(actualToken.isBlank(), String.format("Actual token value '%s' is not blank", actualToken));
     }
 
     @Given("following user credentials:")

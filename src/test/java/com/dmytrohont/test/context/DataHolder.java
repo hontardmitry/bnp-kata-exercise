@@ -1,9 +1,9 @@
 package com.dmytrohont.test.context;
 
-import lombok.Data;
 import com.dmytrohont.test.models.PostEntity;
 import com.dmytrohont.test.models.UserEntity;
 import com.dmytrohont.test.models.response.CommonResponse;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

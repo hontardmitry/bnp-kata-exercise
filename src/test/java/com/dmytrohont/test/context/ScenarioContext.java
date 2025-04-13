@@ -3,6 +3,7 @@ package com.dmytrohont.test.context;
 import com.dmytrohont.test.models.PostEntity;
 import com.dmytrohont.test.models.UserEntity;
 import com.dmytrohont.test.models.response.CommonResponse;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import io.restassured.response.Response;
 
 public class ScenarioContext {
 
+    private static final String REQUEST_BODY = "requestBody";
     private static final String NOT_FOUND_ERROR_MESSAGE_TMPLT = "No %s found in the data holder";
     // ThreadLocal instance for per-thread com.dmytrohont.test.context management.
     private static final ThreadLocal<DataHolder> context = ThreadLocal.withInitial(DataHolder::new);
@@ -54,6 +56,11 @@ public class ScenarioContext {
         return get(() -> context.get().getRestResponse(), errorMessage);
     }
 
+    public static JsonNode getRequestBody() {
+        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, REQUEST_BODY);
+        return get(() -> context.get().getDataMap().get(REQUEST_BODY), JsonNode.class, errorMessage);
+    }
+
     public static void setCommonResponse(CommonResponse response) {
         context.get().setCommonResponse(response);
     }
@@ -87,5 +94,9 @@ public class ScenarioContext {
     public static List<Map<String, String>> getDataRows() {
         var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "data rows");
         return get(() -> context.get().getRows(), errorMessage);
+    }
+
+    public static void setRequestBody(JsonNode jsonNode) {
+        set(REQUEST_BODY, jsonNode);
     }
 }
