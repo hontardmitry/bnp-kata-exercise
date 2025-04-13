@@ -1,7 +1,5 @@
 package com.dmytrohont.test.client;
 
-import static com.dmytrohont.test.utils.ResponseUtil.checkOkStatusCodeAndExtractResponse;
-
 import com.dmytrohont.test.client.http.method.GetRequest;
 import com.dmytrohont.test.client.http.method.PostRequest;
 import com.dmytrohont.test.models.PostEntity;
@@ -19,12 +17,7 @@ public class PostClient implements GetRequest, PostRequest {
     }
 
     public CommonResponse createPost(Object postBody) {
-        return checkOkStatusCodeAndExtractResponse(post(POSTS_ENDPOINT, postBody))
+        return post(POSTS_ENDPOINT, postBody)
                 .as(CommonResponse.class);
-    }
-
-    public PostEntity getPostById(int id) {
-        return checkOkStatusCodeAndExtractResponse(get(POSTS_ENDPOINT + id))
-                .as(PostEntity.class);
     }
 }

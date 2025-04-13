@@ -26,4 +26,9 @@ public class DataTableUtil {
     public static void getRowsForCurrentEnvAndStore(DataTable dataTable) {
         ScenarioContext.setDataRows(getRowsForCurrentEnv(dataTable));
     }
+
+    public static boolean getBoolean(String boolString) {
+        return Boolean.getBoolean(boolString);
+    }
+
 }
