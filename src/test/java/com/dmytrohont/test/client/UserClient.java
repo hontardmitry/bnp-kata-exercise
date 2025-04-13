@@ -19,13 +19,13 @@ public class UserClient implements GetRequest, PostRequest, PutRequest {
     private static final String UPDATE_USER_ROLE_PATH = USER_ENDPOINT + "UpdateUserRole";
 
     public CommonResponse createUser(UserEntity user) {
-        return checkOkStatusCodeAndExtractResponse(post(USER_ENDPOINT, user))
+        return post(USER_ENDPOINT, user)
                 .as(CommonResponse.class);
     }
 
     public CommonResponse login(String login, String password) {
         var credentials = UserEntity.builder().login(login).password(password).build();
-        return checkOkStatusCodeAndExtractResponse(post(USER_LOGIN_PATH, credentials))
+        return post(USER_LOGIN_PATH, credentials)
                 .as(CommonResponse.class);
     }
 
@@ -41,7 +41,7 @@ public class UserClient implements GetRequest, PostRequest, PutRequest {
 
     public CommonResponse updateUserRole(Integer id, short role) {
         var user = UserEntity.builder().id(id).role(role).build();
-        return checkOkStatusCodeAndExtractResponse(put(UPDATE_USER_ROLE_PATH, user))
+        return put(UPDATE_USER_ROLE_PATH, user)
                 .as(CommonResponse.class);
     }
 

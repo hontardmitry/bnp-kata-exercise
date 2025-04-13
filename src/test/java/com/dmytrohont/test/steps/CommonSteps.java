@@ -3,11 +3,13 @@ package com.dmytrohont.test.steps;
 import static com.dmytrohont.test.utils.FileUtil.loadJsonData;
 import static com.dmytrohont.test.utils.ResponseUtil.getResponseAsList;
 import static com.dmytrohont.test.utils.ResponseUtil.getValueForTheField;
+import static com.dmytrohont.test.utils.StringUtil.getStringsList;
 import static com.dmytrohont.test.utils.assertions.ResponseChecker.checkSuccessResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.dmytrohont.test.client.GenericRestClient;
 import com.dmytrohont.test.context.ScenarioContext;
@@ -16,6 +18,7 @@ import com.dmytrohont.test.models.response.CommonResponse;
 import java.io.IOException;
 import java.util.function.Function;
 
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -27,6 +30,11 @@ import io.restassured.response.Response;
 public class CommonSteps {
 
     private final GenericRestClient restClient = new GenericRestClient();
+
+    @ParameterType("true|false")
+    public Boolean booleanValue(String bool) {
+        return Boolean.parseBoolean(bool);
+    }
 
     @When("I send a GET request to the {string} endpoint with the Id {int}")
     public void iSendGetRequestWithId(String path, Integer id) {
@@ -73,6 +81,30 @@ public class CommonSteps {
         ScenarioContext.setRequestBody(jsonNode);
     }
 
+    @Then("the success field in the response contains {booleanValue} value")
+    public void theSuccessFieldInTheResponseContainsValue(boolean success) {
+        var actualIsSuccess = ScenarioContext.getCommonResponse().isSuccess();
+        assertEquals(success, actualIsSuccess,
+                String.format("Actual success field value %s is not as expected %s", actualIsSuccess, success));
+    }
+
+    @Then("the validationErrors field in the response contains {string} values")
+    public void theValidationErrorsFieldInTheResponseContainsValues(String validationErrorsString) {
+        var actualValidationErrors = ScenarioContext.getCommonResponse().getValidationErrors();
+        var validationErrors = getStringsList(validationErrorsString, ";");
+        validationErrors.forEach(validationError -> {
+            var actualContainsValidationError = actualValidationErrors.contains(validationError);
+            assertTrue(actualContainsValidationError,
+                    String.format("Actual validationErrors field value %s does not contain expected value %s",
+                            actualValidationErrors, validationError));
+        });
+    }
+    @Then("the validationErrors field in the response is empty")
+    public void theValidationErrorsFieldInTheResponseIsEmpty() {
+        var actualValidationErrors = ScenarioContext.getCommonResponse().getValidationErrors();
+       assertTrue(actualValidationErrors.isEmpty(),
+               String.format("Actual validationErrors field value %s is not empty", actualValidationErrors));
+    }
 
     public static void theSuccessResponseContainsIdValue(Function<CommonResponse, Integer> idProviderFunction) {
         CommonResponse response = ScenarioContext.getCommonResponse();
