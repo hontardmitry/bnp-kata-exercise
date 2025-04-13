@@ -1,6 +1,6 @@
 package com.dmytrohont.test.steps;
 
-import static com.dmytrohont.test.steps.CommonSteps.iReceiveTheSuccessResponseWithIdValue;
+import static com.dmytrohont.test.steps.CommonSteps.theSuccessResponseContainsIdValue;
 
 import com.dmytrohont.test.client.UserClient;
 import com.dmytrohont.test.context.ScenarioContext;
@@ -51,8 +51,8 @@ public class UserCreateSteps {
         ScenarioContext.setCommonResponse(response);
     }
 
-    @Then("I receive the success response with userId value")
-    public void iReceiveTheSuccessResponseWithUserIdValue() {
-        iReceiveTheSuccessResponseWithIdValue(CommonResponse::getUserId);
+    @Then("the success response contains userId value")
+    public void theSuccessResponseContainsUserIdValue() {
+        theSuccessResponseContainsIdValue(CommonResponse::getUserId);
     }
 }

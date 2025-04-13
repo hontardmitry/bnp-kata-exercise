@@ -6,10 +6,10 @@ Feature: Login endpoint tests
       | environment | login        | password       |
       | prod        | string123456 | string12341234 |
       | test        | testEnvLogin | testEnvPass    |
-    When I send a POST request to Login with stored login and password
-    Then I receive the token value in the response
+    When I send a POST request to the 'Login' endpoint with stored login and password
+    Then the response contains the token value
 
   @Negative
-  Scenario: Login with invalid credentials
-    When I send a POST request to Login with login "login" and password "test"
-    Then I receive the response with empty value for the token field
+  Scenario: Attempt to login with invalid credentials
+    When I send a POST request to the 'Login' endpoint with login "login" and password "test"
+    Then the token value is blank in the response
