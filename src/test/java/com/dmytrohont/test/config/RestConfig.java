@@ -1,7 +1,7 @@
 package com.dmytrohont.test.config;
 
-import static io.restassured.RestAssured.config;
 import static com.dmytrohont.test.utils.PropertyUtil.getProperty;
+import static io.restassured.RestAssured.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,7 @@ public class RestConfig {
         config.setParam("http.connection.timeout", timeout)
                 .setParam("http.socket.timeout", timeout)
                 .setParam("http.connection-manager.timeout", (long) timeout);
+
 
         specBuilder.setConfig(config().httpClient(config));
         return specBuilder.build();
