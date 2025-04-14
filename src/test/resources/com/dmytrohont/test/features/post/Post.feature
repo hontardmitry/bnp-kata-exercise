@@ -1,10 +1,12 @@
 Feature: Post endpoint tests
 
   @Positive
-  Scenario: Create a post
+  Scenario: Create a post and check that values are correctly saved
     Given the request body is loaded from "post.json"
     When I send a POST request to create a post with stored post body
     Then the success response contains postId value
+    And I retrieve a post by stored id
+    Then the retrieved post has the same title and content as the request body
 
   @Validation
     @Positive
@@ -37,7 +39,7 @@ Feature: Post endpoint tests
       |       | false     | The length of 'Title' must be at least 3 characters. You entered 0 characters. |
       | 0     | false     | The length of 'Title' must be at least 3 characters. You entered 1 characters. |
       | ab    | false     | The length of 'Title' must be at least 3 characters. You entered 2 characters. |
-
+#    For content field the approach in testing would be the same
 
   @Validation
     @Negative

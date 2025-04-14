@@ -39,6 +39,7 @@ public class RestConfig {
                 .setParam("http.socket.timeout", timeout)
                 .setParam("http.connection-manager.timeout", (long) timeout);
 
+
         specBuilder.setConfig(config().httpClient(config));
         return specBuilder.build();
     }

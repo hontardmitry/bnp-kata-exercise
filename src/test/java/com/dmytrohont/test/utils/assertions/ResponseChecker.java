@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.dmytrohont.test.models.response.CommonResponse;
 
-import java.util.List;
-
 public class ResponseChecker {
 
     private ResponseChecker() {
@@ -19,6 +17,7 @@ public class ResponseChecker {
         assertNotNull(response);
         assertTrue(response.isSuccess(), "The value for success should be true");
         assertNull(response.getMessage(), "The message should be empty");
-        assertTrue(List.of(response.getValidationErrors()).isEmpty(), "The validation errors list should be empty");
+        assertTrue(response.getValidationErrors().isEmpty(),
+                "The validation errors list should be empty");
     }
 }

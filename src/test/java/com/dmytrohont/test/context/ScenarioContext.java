@@ -37,9 +37,9 @@ public class ScenarioContext {
                 .orElseThrow(() -> new RuntimeException(errorMessage));
     }
 
-    public static String getString(String key) {
+    public static Integer getInteger(String key) {
         var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, key);
-        return get(() -> context.get().getDataMap().get(key), String.class, errorMessage);
+        return get(() -> context.get().getDataMap().get(key), Integer.class, errorMessage);
     }
 
     public static Object getObject(String key) {
