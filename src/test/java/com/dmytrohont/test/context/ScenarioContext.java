@@ -37,14 +37,13 @@ public class ScenarioContext {
                 .orElseThrow(() -> new RuntimeException(errorMessage));
     }
 
-    public static Integer getInteger(String key) {
+    public static <T> T get(String key, Class<T> type) {
         var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, key);
-        return get(() -> context.get().getDataMap().get(key), Integer.class, errorMessage);
+        return get(() -> context.get().getDataMap().get(key), type, errorMessage);
     }
 
-    public static Object getObject(String key) {
-        var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, key);
-        return get(() -> context.get().getDataMap().get(key), errorMessage);
+    public static Integer getInteger(String key) {
+        return get(key, Integer.class);
     }
 
     public static void setResponse(Response response) {
@@ -67,7 +66,15 @@ public class ScenarioContext {
 
     public static CommonResponse getCommonResponse() {
         var errorMessage = String.format(NOT_FOUND_ERROR_MESSAGE_TMPLT, "common response");
-        return get(() -> context.get().getCommonResponse(), errorMessage);
+
+        var currentCommonResponse = context.get().getCommonResponse();
+        var response = context.get().getRestResponse();
+        if (currentCommonResponse == null && response != null) {
+            currentCommonResponse = context.get().getRestResponse().as(CommonResponse.class);
+        } else {
+            throw new RuntimeException(errorMessage);
+        }
+        return currentCommonResponse;
     }
 
     public static void setUser(UserEntity user) {

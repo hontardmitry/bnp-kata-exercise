@@ -1,10 +1,8 @@
 # API Test Automation Framework
 
-This project is a basic API Test Automation Framework built with **Java**, **Rest-Assured**, and **Cucumber**. It targets the endpoints of a hotel booking application and demonstrates structured, maintainable, and scalable API test automation practices.
+This project is a basic API Test Automation Framework built using Java, Rest Assured, and Cucumber. It targets sample endpoints of a dummy API service and demonstrates key principles of structured, maintainable, and scalable API test automation.
 
-## 🔗 Application Under Test
-
-- 📘 Swagger Documentation:
+The purpose of this framework is to showcase core skills in designing and implementing automated API tests. It is not intended to provide full test coverage or include exhaustive validation checks. Instead, it focuses on demonstrating the ability to work with test automation tools and provide solutions for a specified API
     - [BookingService API](https://booking-service-api.azurewebsites.net/swagger/index.html)
 
 ---

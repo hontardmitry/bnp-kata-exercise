@@ -1,7 +1,7 @@
 package com.dmytrohont.test.config;
 
-import static io.restassured.RestAssured.config;
 import static com.dmytrohont.test.utils.PropertyUtil.getProperty;
+import static io.restassured.RestAssured.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

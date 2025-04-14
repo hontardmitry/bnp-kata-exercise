@@ -1,6 +1,13 @@
 Feature: Post endpoint tests
 
   @Positive
+  @Smoke
+  Scenario: Retrieve posts.
+    When I send a GET request to the 'Post' endpoint
+    Then the response contains a list of posts with not empty values for each field
+
+  @Positive
+    @Smoke
   Scenario: Create a post and check that values are correctly saved
     Given the request body is loaded from "post.json"
     When I send a POST request to create a post with stored post body

@@ -22,7 +22,6 @@ public class DataHolder {
     private List<Map<String, String>> rows;
     private Map<String, Object> dataMap;
 
-    // Constructor to initialize the collections.
     public DataHolder() {
         this.dataMap = new HashMap<>();
         this.rows = new ArrayList<>();

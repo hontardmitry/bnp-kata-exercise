@@ -10,13 +10,18 @@ import com.dmytrohont.test.models.response.CommonResponse;
 
 import java.util.List;
 
-public class UserClient implements GetRequest, PostRequest, PutRequest {
+import io.restassured.response.Response;
 
-    private static final String USER_ENDPOINT = "User/";
-    private static final String USER_ID_PATH = USER_ENDPOINT + "{id}";
-    private static final String USER_LOGIN_PATH = USER_ENDPOINT + "Login";
-    private static final String GET_USER_ADMINISTRATION_PATH = USER_ENDPOINT + "GetUserAdministration";
-    private static final String UPDATE_USER_ROLE_PATH = USER_ENDPOINT + "UpdateUserRole";
+public class UserClient implements GetRequest, PostRequest, PutRequest {
+// Each API endpoint exposes a different set of operations. For example, retrieving an entity by ID is only supported
+// by the User endpoint. Therefore, using interfaces with default methods provides more flexibility and better
+// separation of concerns than a common abstract client.
+
+    public static final String USER_ENDPOINT = "User/";
+    public static final String USER_ID_PATH = USER_ENDPOINT + "{id}";
+    public static final String USER_LOGIN_PATH = USER_ENDPOINT + "Login";
+    public static final String GET_USER_ADMINISTRATION_PATH = USER_ENDPOINT + "GetUserAdministration";
+    public static final String UPDATE_USER_ROLE_PATH = USER_ENDPOINT + "UpdateUserRole";
 
     public CommonResponse createUser(UserEntity user) {
         return post(USER_ENDPOINT, user)
@@ -29,9 +34,8 @@ public class UserClient implements GetRequest, PostRequest, PutRequest {
                 .as(CommonResponse.class);
     }
 
-    public UserEntity getUser(Integer id) {
-        return checkOkStatusCodeAndExtractResponse(get(USER_ID_PATH, id))
-                .as(UserEntity.class);
+    public Response getUserAsResponse(Integer id) {
+        return get(USER_ID_PATH, id);
     }
 
     public List<UserEntity> getUserAdministration() {
@@ -39,11 +43,8 @@ public class UserClient implements GetRequest, PostRequest, PutRequest {
                 .jsonPath().getList("", UserEntity.class);
     }
 
-    public CommonResponse updateUserRole(Integer id, short role) {
+    public Response updateUserRole(Integer id, Integer role) {
         var user = UserEntity.builder().id(id).role(role).build();
-        return put(UPDATE_USER_ROLE_PATH, user)
-                .as(CommonResponse.class);
+        return put(UPDATE_USER_ROLE_PATH, user);
     }
-
-
 }

@@ -4,9 +4,6 @@ import com.dmytrohont.test.client.http.method.GetRequest;
 import com.dmytrohont.test.client.http.method.PostRequest;
 import com.dmytrohont.test.models.PostEntity;
 import com.dmytrohont.test.models.response.CommonResponse;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -27,13 +24,8 @@ public class PostClient implements GetRequest, PostRequest {
     }
 
     public List<PostEntity> getAllPosts() {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = get(POSTS_ENDPOINT)
-                .as(JsonNode.class);
-
-        return mapper.convertValue(jsonNode,
-                new TypeReference<List<PostEntity>>() {});
-
+        return get(POSTS_ENDPOINT)
+                .jsonPath().getList("", PostEntity.class);
     }
 
     public PostEntity getPostById(int id) {
